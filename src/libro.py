@@ -7,6 +7,7 @@ class Libro:
         self.ejemplares_disponibles = ejemplares_disponibles
 
     def __str__(self):
+        libro = ""
         libro += f"titulo: {self.titulo} \n"
         libro += f"autor: {self.autor} \n"
         libro += f"ISBN: {self.isbn} \n"

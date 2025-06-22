@@ -9,7 +9,9 @@ def menu():
     print("4. Prestar libro")
     print("5. Devolver libro")
     print("6. Lista de libros")
-    print("7. Salir")
+    print("7. Guardar estanteria")
+    print("8. Cargar estanteria")
+    print("9. Salir")
 
 def pedir_libro(biblioteca : Biblioteca):
     titulo = input("Titulo: ")
@@ -60,6 +62,16 @@ def devolver_libro(biblioteca : Biblioteca):
     else:
         print("Devolucion fallida")
 
+def guardar_estanteria(biblioteca : Biblioteca):
+    filename = input("Dime el nombre del archivo a guardar: ")
+
+    biblioteca.guardar(filename)
+
+def cargar_estanteria(biblioteca : Biblioteca):
+    filename = input("Dime el nombre del archivo a cargar: ")
+
+    biblioteca.cargar(filename)
+
 if __name__ == "__main__":
 
     biblioteca = Biblioteca()
@@ -83,3 +95,7 @@ if __name__ == "__main__":
             case 5 : devolver_libro(biblioteca)
 
             case 6: biblioteca.listar_libros()
+
+            case 7: guardar_estanteria(biblioteca)
+
+            case 8: cargar_estanteria(biblioteca)

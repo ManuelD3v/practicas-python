@@ -1,4 +1,5 @@
 from libro import Libro
+import orjson
     
 class Biblioteca:
 
@@ -55,3 +56,15 @@ class Biblioteca:
             print ("___________________________")
             print (x)
             indice += 1
+
+    def guardar(self, filename):
+        path = filename+".json"
+        with open(path,"wb") as archivo:
+            archivo.write(orjson.dumps(self.estanteria))
+
+    def cargar(self, filename):
+        path = filename + ".json"
+        with open(path, "rb") as archivo:
+            self.estanteria = orjson.loads(archivo.read())
+        
+        print(self.estanteria)

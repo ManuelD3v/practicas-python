@@ -60,24 +60,26 @@ def devolver_libro(biblioteca : Biblioteca):
     else:
         print("Devolucion fallida")
 
-biblioteca = Biblioteca()
+if __name__ == "__main__":
 
-opcion : int
-opcion = None
-while (opcion != 7):
-    
-    menu()
-    opcion = int(input("Seleccion: "))
+    biblioteca = Biblioteca()
 
-    match opcion:
-        case 1 : pedir_libro(biblioteca) 
+    opcion : int
+    opcion = None
+    while (opcion != 7):
+        
+        menu()
+        opcion = int(input("Seleccion: "))
 
-        case 2 : pedir_titulo(biblioteca)
+        match opcion:
+            case 1 : pedir_libro(biblioteca) 
 
-        case 3 : pedir_autor(biblioteca)
+            case 2 : pedir_titulo(biblioteca)
 
-        case 4 : prestar_libro(biblioteca)
+            case 3 : pedir_autor(biblioteca)
 
-        case 5 : devolver_libro(biblioteca)
+            case 4 : prestar_libro(biblioteca)
 
-        case 6: biblioteca.listar_libros()
+            case 5 : devolver_libro(biblioteca)
+
+            case 6: biblioteca.listar_libros()

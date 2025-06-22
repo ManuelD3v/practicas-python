@@ -1,1 +1,1 @@
-#No hay requerimientos
+orjson >= 3.10,<4

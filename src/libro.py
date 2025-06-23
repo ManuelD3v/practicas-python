@@ -14,3 +14,17 @@ class Libro:
         libro += f"ejemplares disponibles: {self.ejemplares_disponibles}"
 
         return libro
+
+    def to_dict(self):
+        return {
+            "titulo" : self.titulo,
+            "autor" : self.autor,
+            "isbn" : self.isbn,
+            "ejemplares disponibles" : self.ejemplares_disponibles
+        }
+    
+    def from_dict(self,data : dict):
+        self.titulo = data["titulo"]
+        self.autor = data["autor"]
+        self.isbn = data["isbn"]
+        self.ejemplares_disponibles = data["ejemplares "]

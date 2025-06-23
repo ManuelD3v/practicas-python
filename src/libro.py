@@ -23,8 +23,10 @@ class Libro:
             "ejemplares disponibles" : self.ejemplares_disponibles
         }
     
-    def from_dict(self,data : dict):
-        self.titulo = data["titulo"]
-        self.autor = data["autor"]
-        self.isbn = data["isbn"]
-        self.ejemplares_disponibles = data["ejemplares "]
+    def from_dict(data : dict):
+        titulo = data["titulo"]
+        autor = data["autor"]
+        isbn = data["isbn"]
+        ejemplares_disponibles = data["ejemplares disponibles"]
+
+        return Libro(titulo,autor,isbn,ejemplares_disponibles)

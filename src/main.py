@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     opcion : int
     opcion = None
-    while (opcion != 7):
+    while (opcion != 9):
         
         menu()
         opcion = int(input("Seleccion: "))

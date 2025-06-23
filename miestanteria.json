@@ -1,0 +1,14 @@
+{
+  "1": {
+    "titulo": "aaa",
+    "autor": "sss",
+    "isbn": "1",
+    "ejemplares disponibles": 12
+  },
+  "4": {
+    "titulo": "bbbb",
+    "autor": "ssssss",
+    "isbn": "4",
+    "ejemplares disponibles": 23
+  }
+}

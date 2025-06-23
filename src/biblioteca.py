@@ -1,5 +1,5 @@
 from libro import Libro
-import orjson
+import orjson,json
     
 class Biblioteca:
 
@@ -59,12 +59,19 @@ class Biblioteca:
 
     def guardar(self, filename):
         path = filename+".json"
+
+        datos = {}
+
+        for isbn,libro in self.estanteria.items():
+            datos[isbn] = libro.to_dict()
+
         with open(path,"wb") as archivo:
-            archivo.write(orjson.dumps(self.estanteria))
+            archivo.write(orjson.dumps(datos,option=orjson.OPT_INDENT_2))
 
     def cargar(self, filename):
         path = filename + ".json"
         with open(path, "rb") as archivo:
-            self.estanteria = orjson.loads(archivo.read())
+            datos = orjson.loads(archivo.read())
         
-        print(self.estanteria)
+        for isbn,libro in datos.items():
+            self.estanteria [isbn] = Libro.from_dict(libro)

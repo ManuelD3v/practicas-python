@@ -8,52 +8,58 @@ class Biblioteca:
         self.estanteria = {}
 
     def validar_titulo(titulo : str):
-        
-        if titulo.isalnum:
 
-            raise ExcepcionCustom("Titulo no alpha-numerico", 100)
-        
-        if titulo == "":
+        if titulo == None:
 
-            raise ExcepcionCustom("Titulo vacio", 101)
+            raise ExcepcionCustom("Titulo vacio",100)
         
+        if not titulo.isalnum:
+
+            raise ExcepcionCustom("Titulo no alpha-numerico", 101) 
+    
     def validar_autor(autor : str):
-        
-        if autor.isalnum:
 
-            raise ExcepcionCustom("Autor no alpha-numerico", 200)
-        
-        if autor == "":
+        if autor == None:
 
-            raise ExcepcionCustom("Autor vacio", 201)
+            raise ExcepcionCustom("Autor vacio", 200)
+        
+        if not autor.isalnum:
+
+            raise ExcepcionCustom("Autor no alpha-numerico", 201)
 
     def validar_isbn(isbn : str):
-        
-        if isbn.isalnum:
 
-            raise ExcepcionCustom("Isbn no alpha-numerico", 300)
+        if isbn == None:
+            
+            raise ExcepcionCustom("Isbn vacio", 300)
         
-        if isbn == "":
+        if not isbn.isalnum:
 
-            raise ExcepcionCustom("Isbn vacio", 301)
+            raise ExcepcionCustom("Isbn no alpha-numerico", 301)
+      
+    def validar_ejemplares(ejemplares : str):
+
+        if ejemplares == None:
+            
+            raise ExcepcionCustom("Ejemplares vacio", 400)
+
+        if not ejemplares.isdecimal:
+            
+            raise ExcepcionCustom("Ejemplares no es decimal", 401)
         
-        for x in isbn:
-            if x == " ":
+        if int(ejemplares) < 0:
 
-                raise ExcepcionCustom("Isbn contiene espacio", 302)
-               
-    def validar_ejemplares(ejemplares : int):
-        
-        if ejemplares < 0:
-
-            raise ExcepcionCustom("Numero de ejemplares negativo",400)
+            raise ExcepcionCustom("Numero de ejemplares negativo", 403)
         
     def validar_filename(filename : str):
-        
-        if filename == "":
 
-            raise ExcepcionCustom("Direccion vacia", 401)
-            
+        if filename == None:
+
+            raise ExcepcionCustom("Nombre de archivo vacio", 500)
+        
+        if not filename.isalnum:
+
+            raise ExcepcionCustom("Nombre de archivo no alpha-numerico", 501)
 
     def agregar_libro(self,libro : Libro):
 

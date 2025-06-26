@@ -25,84 +25,91 @@ def limpiar_pantalla():
 
         x += 1
 
-def pedir_libro(biblioteca : Biblioteca):
-    try:
-
-        titulo = input("Titulo: ")
-        Biblioteca.validar_titulo(titulo)
-
-        autor = input("Autor: ")
-        Biblioteca.validar_autor(autor)
-
-        isbn = input("Isbn: ")
-        Biblioteca.validar_isbn(isbn)
-
-        ejemplares = int(input("Numero de ejemplares disponibles: "))
-        Biblioteca.validar_ejemplares(ejemplares)
-
-        libro : Libro
-
-        libro = Libro(titulo, autor, isbn, ejemplares)
-
-        try:
-            
-            biblioteca.agregar_libro(libro)
-
-        except ExcepcionCustom as e:
-            print(f"Error encontrado: {e}")
+def ask_book(biblioteca : Biblioteca):
     
-    except ExcepcionCustom as e:
-        print(f"Error encontrado: {e}")
-
-def pedir_titulo(biblioteca : Biblioteca):
-
-    titulo = input("Titulo: ")
-
     try:
-
-        libros = biblioteca.buscar_por_titulo(titulo)
-
-    except ExcepcionCustom as e:
-        print(f"Error encontrado: {e}")
-
-    if libros.__len__ == 0:
-
-        print("No hay libros con ese titulo")
-
-    else:
-
-        for x in libros:
-
-            print(x)
     
-def pedir_autor(biblioteca : Biblioteca):
+        title = input("Titulo: ")
 
-    autor = input("Autor: ")
+        if not Biblioteca.is_title_valid(title):
+            raise ExcepcionCustom("Titulo invalido.")
 
-    try:
+        author = input("Autor: ")
 
-        libros = biblioteca.buscar_por_autor(autor)
-    
-    except ExcepcionCustom as e:
-        print(f"Error encontrado: {e}")
+        if not Biblioteca.is_author_valid(author):
+            raise ExcepcionCustom("Autor invalido.")
 
-    if libros.__len__ == 0:
+        stock = input("Numero de ejemplares disponibles: ")
 
-        print("No hay libros con ese autor")
+        if not Biblioteca.is_stock_valid(stock):
+            raise ExcepcionCustom("Stock invalido.")
         
-    else:
+        stock = int(stock)
 
-        for x in libros:
+        biblioteca.add_book(title,author,stock)
+    
+    except ExcepcionCustom as e:
+        print(f"Error encontrado: {e}")
 
-            print(x)
+def ask_title(biblioteca : Biblioteca):
 
-def prestar_libro(biblioteca : Biblioteca):
+    title = input("Titulo: ")
+
+    try:
+
+        if not Biblioteca.is_title_valid(title):
+            raise ExcepcionCustom("Titulo invalido.")
+
+        books = biblioteca.search_by_title(title)
+
+        if books.__len__ == 0:
+
+            print("No hay libros con ese titulo")
+
+        else:
+
+            for x in books:
+
+                print(x)
+
+    except ExcepcionCustom as e:
+        print(f"Error encontrado: {e}")
+    
+def ask_author(biblioteca : Biblioteca):
+
+    author = input("Autor: ")
+
+    try:
+
+        if not Biblioteca.is_author_valid(author):
+            raise ExcepcionCustom("Autor invalido.")
+
+        books = biblioteca.search_by_author(author)
+
+        if books.__len__ == 0:
+
+            print("No hay libros con ese autor")
+        
+        else:
+
+            for x in books:
+
+                print(x)
+
+    except ExcepcionCustom as e:
+        print(f"Error encontrado: {e}")
+
+    
+
+def lend_book(biblioteca : Biblioteca):
 
     isbn = input("Dame el isbn del libro: ")
 
     try:
+        if not Biblioteca.is_isbn_valid(isbn):
+            raise ExcepcionCustom("Isbn invalido.")
 
-        if biblioteca.prestar_libro(isbn):
+        if biblioteca.lend_book(int(isbn)):
 
             print("Prestamo exitoso")
 
@@ -113,13 +120,16 @@ def prestar_libro(biblioteca : Biblioteca):
     except ExcepcionCustom as e:
         print(f"Error encontrado: {e}")
 
-def devolver_libro(biblioteca : Biblioteca):
+def return_book(biblioteca : Biblioteca):
 
     isbn = input("Dame el isbn del libro: ")
-
-
+    
     try:
-        if biblioteca.devolver_libro(isbn):
+
+        if not Biblioteca.is_isbn_valid(isbn):
+            raise ExcepcionCustom("Isbn invalido.")
+
+        if biblioteca.return_book(isbn):
 
             print("Devolucion exitosa")
         
@@ -128,27 +138,36 @@ def devolver_libro(biblioteca : Biblioteca):
             print("Libro no encontrado")
 
     except ExcepcionCustom as e:
-        print(f"Error encontrado: {e}")
+        print(f"Error encontrado. {e}")
 
-def guardar_estanteria(biblioteca : Biblioteca):
+def save_bookshelf(biblioteca : Biblioteca):
 
     filename = input("Dime el nombre del archivo a guardar: ")
 
     try:
-        biblioteca.guardar(filename)
+
+        if not Biblioteca.is_filename_valid(filename):
+            raise ExcepcionCustom("Ruta invalida.")
+
+        biblioteca.save(filename)
+
     except ExcepcionCustom as e:
         print(f"Error encontrado: {e}")
 
 
-def cargar_estanteria(biblioteca : Biblioteca):
+def load_bookshelf(biblioteca : Biblioteca):
 
     filename = input("Dime el nombre del archivo a cargar: ")
 
     try:
-        biblioteca.cargar(filename)
+
+        if not Biblioteca.is_filename_valid(filename):
+            raise ExcepcionCustom("Ruta invalida.")
+
+        biblioteca.load(filename)
+
     except ExcepcionCustom as e:
         print(f"Error encontrado: {e}")
-
 
 if __name__ == "__main__":
 
@@ -163,26 +182,30 @@ if __name__ == "__main__":
         opcion = int(input("Seleccion: "))
 
         match opcion:
-            case 1 : pedir_libro(biblioteca) 
+            case 1 : ask_book(biblioteca) 
 
-            case 2 : pedir_titulo(biblioteca)
+            case 2 : ask_title(biblioteca)
 
-            case 3 : pedir_autor(biblioteca)
+            case 3 : ask_author(biblioteca)
 
-            case 4 : prestar_libro(biblioteca)
+            case 4 : lend_book(biblioteca)
 
-            case 5 : devolver_libro(biblioteca)
+            case 5 : return_book(biblioteca)
 
             case 6: 
                 
                 try:
-                    biblioteca.listar_libros()
+                    biblioteca.show_books()
                 except ExcepcionCustom as e:
                     print(f"Error encontrado: {e}")
 
-            case 7: guardar_estanteria(biblioteca)
+            case 7: save_bookshelf(biblioteca)
 
-            case 8: cargar_estanteria(biblioteca)
+            case 8: load_bookshelf(biblioteca)
+            
+            case 9: print("Saliendo")
+
+            case _: print("Opcion fuera de rango")
         
         bin = input("Pulsa enter para continuar.")
 

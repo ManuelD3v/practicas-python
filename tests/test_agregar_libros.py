@@ -21,7 +21,7 @@ clases invalidas:
 )
 
 def test_titulo_valido(titulo,esperado : bool, clase_equivalencia: str):
-    resultado = Biblioteca.validar_titulo(titulo)
+    resultado = Biblioteca.is_title_valid(titulo)
     assert resultado == esperado , f"Fallo en clase: {clase_equivalencia}"
 
 """
@@ -45,39 +45,40 @@ clases invalidas:
 )
 
 def test_autor_valido(autor,esperado : bool, clase_equivalencia: str):
-    resultado = Biblioteca.validar_autor(autor)
+    resultado = Biblioteca.is_author_valid(autor)
     assert resultado == esperado , f"Fallo en clase: {clase_equivalencia}"
 
 """
 clases equivalencia isbn
 
 clases validas:  
-    V1: isbn alfanumerico            
+    V1: isbn numerico > 0            
 
 clases invalidas:
     I1: isbn vacio
-    I2: isbn con caracteres no alfanumericos
+    I2: isbn con caracteres no numericos
+    I3: isbn < 0
 """
 
 @pytest.mark.parametrize(
     "isbn,esperado,clase_equivalencia",
     [
-        ("123aaa",True,"V1: autor alfanumerico"),
-        ("",False,"I1: autor vacio"),
-        ("123@",False,"I2: isbn con caracteres no alfanumericos")
+        ("1",True,"V1: isbn numerico"),
+        ("",False,"I1: isbn vacio"),
+        ("123@",False,"I2: isbn con caracteres no numericos"),
+        ("-1",False,"I3: isbn < 0")
     ]
 )
 
 def test_isbn_valido(isbn,esperado : bool, clase_equivalencia: str):
-    resultado = Biblioteca.validar_isbn(isbn)
+    resultado = Biblioteca.is_isbn_valid(isbn)
     assert resultado == esperado , f"Fallo en clase: {clase_equivalencia}"
 
 """
 clases equivalencia numero de ejemplares
 
 clases validas:  
-    V1: numero de ejemplares de tipo numerico
-    V2: numero >= 0         
+    V1: numero de ejemplares de tipo numerico y numero >= 0
 
 clases invalidas:
     I1: numero de ejemplares vacio
@@ -86,18 +87,17 @@ clases invalidas:
 """
 
 @pytest.mark.parametrize(
-    "isbn,esperado,clase_equivalencia",
+    "ejemplares,esperado,clase_equivalencia",
     [
         ("123",True,"V1: numero de ejemplares de tipo numerico"),
-        ("123",True,"V2: numero >= 0"),
         ("",False,"I1: numero de ejemplares vacio"),
         ("123@",False,"I2: numero de ejemplares con simbolos no numericos"),
-        ("-123",True,"I3: numero de ejemplares negativo"),
+        ("-123",False,"I3: numero de ejemplares negativo"),
     ]
 )
 
 def test_numero_ejemplares_valido(ejemplares,esperado : bool, clase_equivalencia: str):
-    resultado = Biblioteca.validar_ejemplares(ejemplares)
+    resultado = Biblioteca.is_stock_valid(ejemplares)
     assert resultado == esperado , f"Fallo en clase: {clase_equivalencia}"
 
 """
@@ -112,7 +112,7 @@ clases invalidas:
 """
 
 @pytest.mark.parametrize(
-    "nombre del archivo,esperado,clase_equivalencia",
+    "filename,esperado,clase_equivalencia",
     [
         ("123aaa",True,"V1: nombre del archivo alfanumerico"),
         ("",False,"I1: nombre del archivo vacio"),
@@ -121,5 +121,5 @@ clases invalidas:
 )
 
 def test_nombre_archivo_valido(filename,esperado : bool, clase_equivalencia: str):
-    resultado = Biblioteca.validar_filename(filename)
+    resultado = Biblioteca.is_filename_valid(filename)
     assert resultado == esperado , f"Fallo en clase: {clase_equivalencia}"

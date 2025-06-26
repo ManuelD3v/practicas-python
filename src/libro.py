@@ -1,36 +1,36 @@
 class Libro:
 
-    def __init__(self, titulo : str, autor : str, isbn : str, ejemplares_disponibles : int):
+    def __init__(self, title : str, author : str, isbn : int, stock : int):
 
-        self.titulo = titulo
-        self.autor = autor
+        self.title = title
+        self.author = author
         self.isbn = isbn
-        self.ejemplares_disponibles = ejemplares_disponibles
+        self.stock = stock
 
     def __str__(self):
 
         libro = ""
-        libro += f"titulo: {self.titulo} \n"
-        libro += f"autor: {self.autor} \n"
+        libro += f"titulo: {self.title} \n"
+        libro += f"autor: {self.author} \n"
         libro += f"ISBN: {self.isbn} \n"
-        libro += f"ejemplares disponibles: {self.ejemplares_disponibles}"
+        libro += f"ejemplares disponibles: {self.stock}"
 
         return libro
 
     def to_dict(self):
         
         return {
-            "titulo" : self.titulo,
-            "autor" : self.autor,
+            "titulo" : self.title,
+            "autor" : self.author,
             "isbn" : self.isbn,
-            "ejemplares disponibles" : self.ejemplares_disponibles
+            "ejemplares disponibles" : self.stock
         }
     
     def from_dict(data : dict):
         
-        titulo = data["titulo"]
-        autor = data["autor"]
+        title = data["titulo"]
+        author = data["autor"]
         isbn = data["isbn"]
-        ejemplares_disponibles = data["ejemplares disponibles"]
+        stock = data["ejemplares disponibles"]
 
-        return Libro(titulo,autor,isbn,ejemplares_disponibles)
+        return Libro(title,author,isbn,stock)

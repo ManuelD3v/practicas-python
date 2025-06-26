@@ -1,14 +1,14 @@
 {
-  "1234": {
+  "1": {
     "titulo": "aaa",
-    "autor": "ss",
-    "isbn": "1234",
-    "ejemplares disponibles": 1222
+    "autor": "sss",
+    "isbn": "1",
+    "ejemplares disponibles": 3
   },
-  "0000": {
-    "titulo": "lolololol",
-    "autor": "leelleel",
-    "isbn": "0000",
-    "ejemplares disponibles": 123444
+  "2": {
+    "titulo": "bbb",
+    "autor": "sss",
+    "isbn": "2",
+    "ejemplares disponibles": 1
   }
 }

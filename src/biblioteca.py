@@ -1,174 +1,146 @@
 from libro import Libro
+from idGenerator import IDGenerator
 import orjson
 from excepcionCustom import ExcepcionCustom
     
 class Biblioteca:
 
     def __init__(self):
-        self.estanteria = {}
+        self.bookshelf = {}
+        self.genId = IDGenerator()
 
-    def validar_titulo(titulo : str):
-
-        if titulo == None:
-
-            raise ExcepcionCustom("Titulo vacio",100)
+    @staticmethod 
+    def is_title_valid(title : str):
         
-        if not titulo.isalnum:
+        return title.isalnum()
 
-            raise ExcepcionCustom("Titulo no alpha-numerico", 101) 
+    @staticmethod     
+    def is_author_valid(author : str):
+        
+        return author.isalnum()
+
+    @staticmethod 
+    def is_isbn_valid(isbn : str):
+
+        return isbn.isdecimal()
+
+    @staticmethod   
+    def is_stock_valid(stock : str):
+
+        if not stock.isdecimal():
+            
+            return False
+        
+        return int(stock) > 0
+
+    @staticmethod    
+    def is_filename_valid(filename : str):
+        
+        return filename.isalnum()
     
-    def validar_autor(autor : str):
-
-        if autor == None:
-
-            raise ExcepcionCustom("Autor vacio", 200)
+    @staticmethod
+    def is_bookshelf_valid(bookshelf : dict):
         
-        if not autor.isalnum:
+        return bookshelf.__len__ != 0
 
-            raise ExcepcionCustom("Autor no alpha-numerico", 201)
+    def add_book(self,title : str ,author : str, stock :int):
 
-    def validar_isbn(isbn : str):
+        book : Libro
 
-        if isbn == None:
-            
-            raise ExcepcionCustom("Isbn vacio", 300)
-        
-        if not isbn.isalnum:
+        book = Libro(title,author,str(self.genId.next_id()), stock)
 
-            raise ExcepcionCustom("Isbn no alpha-numerico", 301)
-      
-    def validar_ejemplares(ejemplares : str):
+        self.bookshelf[book.isbn] = book
 
-        if ejemplares == None:
-            
-            raise ExcepcionCustom("Ejemplares vacio", 400)
+    def search_by_title(self,title : str):
 
-        if not ejemplares.isdecimal:
-            
-            raise ExcepcionCustom("Ejemplares no es decimal", 401)
-        
-        if int(ejemplares) < 0:
-
-            raise ExcepcionCustom("Numero de ejemplares negativo", 403)
-        
-    def validar_filename(filename : str):
-
-        if filename == None:
-
-            raise ExcepcionCustom("Nombre de archivo vacio", 500)
-        
-        if not filename.isalnum:
-
-            raise ExcepcionCustom("Nombre de archivo no alpha-numerico", 501)
-
-    def agregar_libro(self,libro : Libro):
-
-        self.estanteria[libro.isbn] = libro
-
-    def buscar_por_titulo(self,titulo : str):
-
-        Biblioteca.validar_titulo(titulo)
-        
         paquete = []
 
-        for x in self.estanteria.values():
+        for x in self.bookshelf.values():
 
-            if x.titulo == titulo:
+            if x.title == title:
+
+                paquete.append(x)
+        
+        return paquete
+        
+        
+    
+    def search_by_author(self,author : str):
+
+        paquete = []
+
+        for x in self.bookshelf.values():
+
+            if x.author == author:
 
                 paquete.append(x)
         
         return paquete
     
-    def buscar_por_autor(self,autor : str):
+    def lend_book(self, isbn : int):
 
-        Biblioteca.validar_autor(autor)
 
-        paquete = []
-
-        for x in self.estanteria.values():
-
-            if x.autor == autor:
-
-                paquete.append(x)
-        
-        return paquete
-    
-    def prestar_libro(self, isbn : str):
-
-        Biblioteca.validar_isbn(isbn)
-
-        for x in self.estanteria:
+        for x in self.bookshelf:
 
             if x == isbn:
 
-                if self.estanteria[x].ejemplares_disponibles > 0:
+                self.bookshelf[x].stock -= 1
 
-                    self.estanteria[x].ejemplares_disponibles -= 1
+                return True
+            
+        return False
 
-                    return True
-                
-                else:
+    def return_book(self, isbn : str):
 
-                    return False
-
-    def devolver_libro(self, isbn : str):
-
-        Biblioteca.validar_isbn(isbn)
-
-        for x in self.estanteria:
+        for x in self.bookshelf:
 
             if x == isbn:
 
-                self.estanteria[x].ejemplares_disponibles += 1
+                self.bookshelf[x].stock += 1
 
                 return True
         
         return False
-    
-    def listar_libros(self):
+        
+    def show_books(self):
 
-        if self.estanteria.__len__() == 0:
-            raise ExcepcionCustom("Biblioteca vacia", 501)
+        indx = 1
 
-        indice = 1
-
-        for x in self.estanteria.values():
+        for x in self.bookshelf.values():
 
             print ("___________________________")
-            print (f"Libro numero {indice}")
+            print (f"Libro numero {indx}")
             print ("___________________________")
             print (x)
 
-            indice += 1
+            indx += 1
         
         print ("___________________________")
 
-    def guardar(self, filename):
-
-        Biblioteca.validar_filename(filename)
+    def save(self, filename):
         
         path = filename+".json"
 
-        datos = {}
+        data = {}
 
-        for isbn,libro in self.estanteria.items():
+        for isbn,libro in self.bookshelf.items():
 
-            datos[isbn] = libro.to_dict()
+            data[isbn] = libro.to_dict()
 
         with open(path,"wb") as archivo:
 
-            archivo.write(orjson.dumps(datos,option=orjson.OPT_INDENT_2))
+            archivo.write(orjson.dumps(data,option=orjson.OPT_INDENT_2))
 
-    def cargar(self, filename):
-
-        Biblioteca.validar_filename(filename)
+    def load(self, filename):
 
         path = filename + ".json"
 
         with open(path, "rb") as archivo:
 
-            datos = orjson.loads(archivo.read())
+            data = orjson.loads(archivo.read())
         
-        for isbn,libro in datos.items():
-            
-            self.estanteria [isbn] = Libro.from_dict(libro)
+        self.genId.reset()
+
+        for isbn,libro in data.items():
+            self.genId.next_id()
+            self.bookshelf [isbn] = Libro.from_dict(libro)

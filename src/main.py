@@ -169,6 +169,9 @@ def load_bookshelf(biblioteca : Biblioteca):
     except ExcepcionCustom as e:
         print(f"Error encontrado: {e}")
 
+    except FileNotFoundError as e:
+        print(f"No existe fichero con el nombre de {filename}")
+
 if __name__ == "__main__":
 
     biblioteca = Biblioteca()
